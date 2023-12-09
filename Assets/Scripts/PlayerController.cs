@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
     }
-    // Update is called once per frame
+
     void Update()
     {
         MovementHandler();
@@ -34,11 +34,11 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "EnemyBullet")
         {
-            Destroy(this.gameObject);
+            GameManager.instance.GameOver();
         }
         else if (other.gameObject.tag == "Enemy")
         {
-            Destroy(this.gameObject);
+            GameManager.instance.GameOver();
         }
     }
 }
