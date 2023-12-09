@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -13,6 +14,7 @@ public class EnemyController : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool isTriggered = false;
+    private int frameCount = 0;
 
     private GameObject bulletInstance;
 
@@ -27,16 +29,27 @@ public class EnemyController : MonoBehaviour
         HandleVision();
         TriggerToPlayer();
         HandleAttack();
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Transform targetTransform = DjkstraManager.Instance.Run(gameObject.transform, playerTransform);
+            rb.velocity = (targetTransform.position - transform.position).normalized * speed;
+        }
     }
 
     private void TriggerToPlayer()
     {
         if (isTriggered)
         {
-            float horizontal = playerTransform.position.x - transform.position.x;
-            float vertical = playerTransform.position.y - transform.position.y;
+            if (frameCount == 10)
+            {
+                frameCount = 0;
+                Transform targetTransform = DjkstraManager.Instance.Run(gameObject.transform, playerTransform);
+                rb.velocity = (targetTransform.position - transform.position).normalized * speed;
+            }
+            else frameCount++;
 
-            rb.velocity = new Vector2(horizontal * speed, vertical * speed);
+
         }
     }
 
