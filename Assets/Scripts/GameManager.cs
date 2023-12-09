@@ -30,10 +30,23 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(TimeCount());
+
+        timePanel.SetActive(true);
+
+        gamePlayPanel.SetActive(true);
+        gameOverPanel.SetActive(false);
+        gameWinPanel.SetActive(false);
+        pausePanel.SetActive(false);
+    }
+
+    private void Update()
+    {
+        PauseGame();
     }
 
     public void GameOver()
     {
+        Time.timeScale = 0;
         gamePlayPanel.SetActive(false);
         gameOverPanel.SetActive(true);
         isGameActive = false;
@@ -77,8 +90,8 @@ public class GameManager : MonoBehaviour
         {
             if (isGameActive)
             {
-                gamePlayPanel.SetActive(false);
                 Time.timeScale = 0;
+                gamePlayPanel.SetActive(false);
                 pausePanel.SetActive(true);
                 isGameActive = false;
             }
@@ -102,7 +115,4 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
-
-
-
 }

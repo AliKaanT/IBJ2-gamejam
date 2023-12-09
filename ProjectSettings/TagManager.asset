@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - Shuriken
   - EnemyBullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
