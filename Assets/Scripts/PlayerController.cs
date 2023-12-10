@@ -27,6 +27,11 @@ public class PlayerController : MonoBehaviour
     {
         MovementHandler();
         DashHandler();
+
+        // lock the camera
+
+        float oldZ = Camera.main.transform.position.z;
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, oldZ);
     }
 
     public void MovementHandler()
@@ -36,8 +41,13 @@ public class PlayerController : MonoBehaviour
 
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
 
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, new Vector3(horizontal, vertical, 0));
+        transform.Rotate(0, 0, 0);
+
+
         if (horizontal != 0 || vertical != 0)
         {
+
             animator.SetBool("isWalking", true);
         }
         else
