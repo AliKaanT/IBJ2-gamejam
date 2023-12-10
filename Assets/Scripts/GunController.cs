@@ -28,7 +28,10 @@ public class GunController : MonoBehaviour
     {
         animator.SetTrigger("onShoot");
 
+
         if (bulletInstance != null) return;
+
+        AudioManager.instance.PlayShurikenSound();
 
         Vector3 position = gameObject.transform.position;
 
