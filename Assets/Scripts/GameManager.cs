@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        watch.transform.DORotate(new Vector3(0, 0, 360), 1f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
         rb = player.GetComponent<Rigidbody2D>();
         StartCoroutine(TimeCount());
 
@@ -104,7 +105,6 @@ public class GameManager : MonoBehaviour
                 GameOver();
                 if (watch != null)
                 {
-                    watch.transform.DORotate(new Vector3(0, 0, 180), 1f, RotateMode.FastBeyond360).SetEase(Ease.Linear);
                 }
             }
         }
