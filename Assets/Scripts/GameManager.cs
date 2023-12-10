@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public int timeLimit;
     public GameObject timePanel;
     public TextMeshProUGUI timeText;
-    public int enemyCount;
+    private int enemyCount;
     public int score;
 
     public bool isGameActive = true;
@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
     }
 
     private void Start()

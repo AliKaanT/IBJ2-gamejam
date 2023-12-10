@@ -7,17 +7,13 @@ using System.IO;
 public class EnemyPathController : MonoBehaviour
 {
     [SerializeField] private Transform pathParent;
-    [SerializeField] private Transform startPos;
     [SerializeField] private PathType pathType;
+
+    private Transform startPos;
 
     private void Start()
     {
         StartPatrolling();
-    }
-
-    private void Update()
-    {
-        StopPatrolling();
     }
 
     private void StartPatrolling()
@@ -33,14 +29,12 @@ public class EnemyPathController : MonoBehaviour
 
         pathArray[pathArray.Length - 1] = startPos.position;
 
-        transform.DOPath(pathArray, 5f, pathType).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear);
+        transform.DOPath(pathArray, 7f, pathType, PathMode.TopDown2D).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear).SetLookAt(0.01f).SetSpeedBased(true);
     }
+
 
     public void StopPatrolling()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            transform.DOKill();
-        }
+        transform.DOKill();
     }
 }

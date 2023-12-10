@@ -15,4 +15,9 @@ public class EnemyBulletController : MonoBehaviour
         transform.Translate(Time.deltaTime * 10 * Vector3.right);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
+    }
+
 }

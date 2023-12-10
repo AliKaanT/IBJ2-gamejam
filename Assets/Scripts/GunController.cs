@@ -22,11 +22,6 @@ public class GunController : MonoBehaviour
             bulletInstance.GetComponent<BulletController>().StartComingBack(gameObject);
         }
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Time.timeScale = 0.2f;
-        }
     }
 
     void Shoot()
