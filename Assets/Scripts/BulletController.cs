@@ -28,6 +28,7 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        if (isComingBack == true) return;
         if (other.gameObject.tag == "Wall")
         {
             isMoving = false;
@@ -56,25 +57,44 @@ public class BulletController : MonoBehaviour
 
     public void ComeBack()
     {
-        Vector3 currentPosition = transform.position;
-        Vector3 targetPosition = gunTransform.transform.position;
 
-        // calculate desired direction vector
-        Vector3 directionOfTravel = targetPosition - currentPosition;
-
-        if (directionOfTravel.magnitude < .5f)
         {
-            isComingBack = false;
-            isMoving = false;
-            shurkienAnimator.enabled = false;
-            Destroy(gameObject);
+
+            Transform targetTransform = DjkstraManager.Instance.Run(gameObject.transform, gunTransform.transform);
+
+            movingDirection = (targetTransform.position - transform.position).normalized;
+
+            if (Vector3.Distance(transform.position, gunTransform.transform.position) < 1f)
+            {
+                isComingBack = false;
+                isMoving = false;
+                shurkienAnimator.enabled = false;
+                Destroy(gameObject);
+            }
+
+            // transform.rotation = Quaternion.LookRotation(Vector3.forward, targetTransform.position - transform.position);
+            // transform.Rotate(0, 0, 90);
         }
 
-        // normalize vector to get only direction
+        // Vector3 currentPosition = transform.position;
+        // Vector3 targetPosition = gunTransform.transform.position;
 
-        Vector3 directionOfTravelNormalized = directionOfTravel.normalized;
+        // // calculate desired direction vector
+        // Vector3 directionOfTravel = targetPosition - currentPosition;
 
-        // scale to desired length
-        movingDirection = directionOfTravelNormalized * 1;
+        // if (directionOfTravel.magnitude < .5f)
+        // {
+        //     isComingBack = false;
+        //     isMoving = false;
+        //     shurkienAnimator.enabled = false;
+        //     Destroy(gameObject);
+        // }
+
+        // // normalize vector to get only direction
+
+        // Vector3 directionOfTravelNormalized = directionOfTravel.normalized;
+
+        // // scale to desired length
+        // movingDirection = directionOfTravelNormalized * 1;
     }
 }

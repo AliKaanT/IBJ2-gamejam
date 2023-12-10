@@ -22,6 +22,15 @@ public class GameManager : MonoBehaviour
 
     public bool isGameActive = true;
 
+    private List<RecordedState> recordedStates = new List<RecordedState>();
+    private Rigidbody2D rb;
+    [SerializeField] private float _shakeDuration = 1f;
+    [SerializeField] private float _shakeStrength = 1f;
+    [SerializeField] private int _shakeVibrato = 10;
+
+    [SerializeField] private GameObject player;
+    private bool rewinding = false;
+
     private void Awake()
     {
         instance = this;
@@ -31,6 +40,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        rb = player.GetComponent<Rigidbody2D>();
         StartCoroutine(TimeCount());
 
         timePanel.SetActive(true);
@@ -44,11 +54,20 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         PauseGame();
+        if (rewinding == false)
+        {
+            RecordState();
+        }
+        else
+        {
+            RewindTime();
+        }
     }
 
     public void GameOver()
     {
-        Time.timeScale = 0;
+        rewinding = true;
+
         gamePlayPanel.SetActive(false);
         gameOverPanel.SetActive(true);
         isGameActive = false;
@@ -117,4 +136,34 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
+
+    private void RewindTime()
+    {
+        if (recordedStates.Count > 0)
+        {
+            Debug.Log(recordedStates.Count);
+
+            RecordedState recordedState = recordedStates[0];
+            player.transform.position = recordedState.position;
+            rb.velocity = recordedState.velocity;
+            player.transform.rotation = recordedState.rotation;
+
+            for (int i = 0; i < 7; i++)
+            {
+                if (recordedStates.Count > 0)
+                    recordedStates.RemoveAt(0);
+            }
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+    }
+
+    private void RecordState()
+    {
+        recordedStates.Insert(0, new RecordedState(player.transform.position, rb.velocity, player.transform.rotation, Time.time));
+    }
 }
+

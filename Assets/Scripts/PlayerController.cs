@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     float horizontal;
     float vertical;
 
-    public float DashCooldown = 0;
+    private float DashCooldown = 0;
 
     public float runSpeed = 3.0f;
 
@@ -41,14 +41,14 @@ public class PlayerController : MonoBehaviour
 
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
 
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, new Vector3(horizontal, vertical, 0));
-        transform.Rotate(0, 0, 0);
+
 
 
         if (horizontal != 0 || vertical != 0)
         {
-
             animator.SetBool("isWalking", true);
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, new Vector3(horizontal, vertical, 0));
+            transform.Rotate(0, 0, 0);
         }
         else
         {
@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
             {
 
                 animator.SetTrigger("onDash");
-                DashCooldown = 1f;
+                DashCooldown = 2.5f;
                 horizontal = Input.GetAxisRaw("Horizontal");
                 vertical = Input.GetAxisRaw("Vertical");
                 Vector2 direction = new(horizontal, vertical);

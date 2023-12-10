@@ -59,6 +59,7 @@ public class TimeRewind : MonoBehaviour
     {
         transform.DOShakePosition(_shakeDuration, _shakeStrength, _shakeVibrato).OnStart(() =>
         {
+            GetComponent<CapsuleCollider2D>().enabled = false;
             didRewindStart = true;
             _tpMarker.SetActive(false);
         }).OnComplete(() =>
@@ -79,7 +80,7 @@ public class TimeRewind : MonoBehaviour
             rb.velocity = recordedState.velocity;
             transform.rotation = recordedState.rotation;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 20; i++)
             {
                 if (recordedStates.Count > 0)
                     recordedStates.RemoveAt(0);
@@ -97,7 +98,7 @@ public class TimeRewind : MonoBehaviour
         isRewinding = false;
         rb.isKinematic = false;
         _tpMarker.SetActive(true);
-
+        GetComponent<CapsuleCollider2D>().enabled = true;
     }
 }
 
