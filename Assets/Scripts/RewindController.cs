@@ -59,6 +59,8 @@ public class TimeRewind : MonoBehaviour
     {
         transform.DOShakePosition(_shakeDuration, _shakeStrength, _shakeVibrato).OnStart(() =>
         {
+            AudioManager.instance.PlayEkkoSound();
+
             GetComponent<CapsuleCollider2D>().enabled = false;
             didRewindStart = true;
             _tpMarker.SetActive(false);

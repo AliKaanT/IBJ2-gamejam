@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
     {
         rewinding = true;
 
+        AudioManager.instance.PlayDieSound();
+
         gamePlayPanel.SetActive(false);
         gameOverPanel.SetActive(true);
         isGameActive = false;

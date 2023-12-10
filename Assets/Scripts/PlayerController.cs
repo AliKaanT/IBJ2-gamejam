@@ -28,8 +28,6 @@ public class PlayerController : MonoBehaviour
         MovementHandler();
         DashHandler();
 
-        // lock the camera
-
         float oldZ = Camera.main.transform.position.z;
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, oldZ);
     }
@@ -65,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
                 animator.SetTrigger("onDash");
                 DashCooldown = 2.5f;
+                AudioManager.instance.PlayDashSound();
                 horizontal = Input.GetAxisRaw("Horizontal");
                 vertical = Input.GetAxisRaw("Vertical");
                 Vector2 direction = new(horizontal, vertical);
