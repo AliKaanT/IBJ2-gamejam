@@ -7,6 +7,7 @@ public class TimeRewind : MonoBehaviour
     public float maxRewindTime = 5f;
     private List<RecordedState> recordedStates = new List<RecordedState>();
     private bool isRewinding = false;
+    private bool didRewindStart = false;
     private Rigidbody2D rb;
 
     [SerializeField] private GameObject _tpMarker;
@@ -39,15 +40,18 @@ public class TimeRewind : MonoBehaviour
 
     private void RecordState()
     {
-        if (recordedStates.Count > Mathf.Round(maxRewindTime / Time.fixedDeltaTime))
+        if (didRewindStart == false)
         {
-            recordedStates.RemoveAt(recordedStates.Count - 1);
-        }
-        recordedStates.Insert(0, new RecordedState(transform.position, rb.velocity, transform.rotation, Time.time));
+            if (recordedStates.Count > Mathf.Round(maxRewindTime / Time.fixedDeltaTime))
+            {
+                recordedStates.RemoveAt(recordedStates.Count - 1);
+            }
+            recordedStates.Insert(0, new RecordedState(transform.position, rb.velocity, transform.rotation, Time.time));
 
-        if (recordedStates.Count > 0)
-        {
-            _tpMarker.transform.position = new Vector3(recordedStates[recordedStates.Count - 1].position.x, recordedStates[recordedStates.Count - 1].position.y, -1f);
+            if (recordedStates.Count > 0)
+            {
+                _tpMarker.transform.position = new Vector3(recordedStates[recordedStates.Count - 1].position.x, recordedStates[recordedStates.Count - 1].position.y, -1f);
+            }
         }
     }
 
@@ -55,6 +59,7 @@ public class TimeRewind : MonoBehaviour
     {
         transform.DOShakePosition(_shakeDuration, _shakeStrength, _shakeVibrato).OnStart(() =>
         {
+            didRewindStart = true;
             _tpMarker.SetActive(false);
         }).OnComplete(() =>
         {
@@ -88,6 +93,7 @@ public class TimeRewind : MonoBehaviour
 
     private void StopRewind()
     {
+        didRewindStart = false;
         isRewinding = false;
         rb.isKinematic = false;
         _tpMarker.SetActive(true);

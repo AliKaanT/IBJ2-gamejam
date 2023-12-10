@@ -28,12 +28,6 @@ public class EnemyController : MonoBehaviour
     {
         HandleVision();
         TriggerToPlayer();
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Transform targetTransform = DjkstraManager.Instance.Run(gameObject.transform, playerTransform);
-            rb.velocity = (targetTransform.position - transform.position).normalized * speed;
-        }
     }
 
     private void TriggerToPlayer()
@@ -61,8 +55,12 @@ public class EnemyController : MonoBehaviour
             Vector2 enemyPosition = transform.position;
             Vector2 playerPosition = playerTransform.position;
             RaycastHit2D hit = Physics2D.Linecast(enemyPosition, playerPosition, LayerMask.GetMask("Wall"));
-            if (hit.collider == null)
+
+            float distance = Vector2.Distance(enemyPosition, playerPosition);
+
+            if (hit.collider == null && distance < 10f)
             {
+                Debug.Log(distance);
                 StartCoroutine(ShootABullet());
                 isTriggered = true;
                 EnemyPathController epc = gameObject.GetComponent<EnemyPathController>();
