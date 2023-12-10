@@ -28,7 +28,6 @@ public class EnemyController : MonoBehaviour
     {
         HandleVision();
         TriggerToPlayer();
-        HandleAttack();
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -46,9 +45,11 @@ public class EnemyController : MonoBehaviour
                 frameCount = 0;
                 Transform targetTransform = DjkstraManager.Instance.Run(gameObject.transform, playerTransform);
                 rb.velocity = (targetTransform.position - transform.position).normalized * speed;
+
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, targetTransform.position - transform.position);
+                transform.Rotate(0, 0, 90);
             }
             else frameCount++;
-
 
         }
     }
@@ -61,7 +62,13 @@ public class EnemyController : MonoBehaviour
             Vector2 playerPosition = playerTransform.position;
             RaycastHit2D hit = Physics2D.Linecast(enemyPosition, playerPosition, LayerMask.GetMask("Wall"));
             if (hit.collider == null)
+            {
+                StartCoroutine(ShootABullet());
                 isTriggered = true;
+                EnemyPathController epc = gameObject.GetComponent<EnemyPathController>();
+                if (epc != null)
+                    epc.StopPatrolling();
+            }
         }
     }
 
@@ -69,29 +76,30 @@ public class EnemyController : MonoBehaviour
     {
         if (other.gameObject.tag == "Shuriken")
         {
+            GameManager.instance.EnemyKilled();
             Destroy(this.gameObject);
         }
     }
 
-    private void HandleAttack()
+    private IEnumerator ShootABullet()
     {
-        if (isTriggered)
+        while (true)
         {
-
-            if (bulletInstance == null)
+            Vector2 enemyPosition = transform.position;
+            Vector2 playerPosition = playerTransform.position;
+            RaycastHit2D hit = Physics2D.Linecast(enemyPosition, playerPosition, LayerMask.GetMask("Wall"));
+            if (hit.collider == null)
             {
-                Vector2 enemyPosition = transform.position;
-                Vector2 playerPosition = playerTransform.position;
                 Vector2 direction = playerPosition - enemyPosition;
-
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                 Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 bulletInstance = Instantiate(enemyBulletPrefab, enemyPosition, rotation);
-
-
-
+                yield return new WaitForSeconds(1f);
             }
-
+            else
+            {
+                yield return new WaitForSeconds(.1f);
+            }
         }
     }
 }
