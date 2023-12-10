@@ -18,6 +18,8 @@ public class EnemyController : MonoBehaviour
 
     private GameObject bulletInstance;
 
+    public GameObject DeadBodyPrefab;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -75,6 +77,7 @@ public class EnemyController : MonoBehaviour
         if (other.gameObject.tag == "Shuriken")
         {
             GameManager.instance.EnemyKilled();
+            Instantiate(DeadBodyPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
     }

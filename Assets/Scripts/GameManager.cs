@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using DG.Tweening;
 
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
@@ -17,10 +18,12 @@ public class GameManager : MonoBehaviour
     public int timeLimit;
     public GameObject timePanel;
     public TextMeshProUGUI timeText;
-    private int enemyCount;
+    public int enemyCount;
     public int score;
 
     public bool isGameActive = true;
+
+    public Image watch;
 
     private List<RecordedState> recordedStates = new List<RecordedState>();
     private Rigidbody2D rb;
@@ -28,14 +31,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float _shakeStrength = 1f;
     [SerializeField] private int _shakeVibrato = 10;
 
+
+
     [SerializeField] private GameObject player;
     private bool rewinding = false;
 
     private void Awake()
     {
         instance = this;
-
-        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
     }
 
     private void Start()
@@ -71,6 +74,11 @@ public class GameManager : MonoBehaviour
         gamePlayPanel.SetActive(false);
         gameOverPanel.SetActive(true);
         isGameActive = false;
+
+        foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            Destroy(enemy);
+        }
     }
 
     private void GameWin()
@@ -92,6 +100,10 @@ public class GameManager : MonoBehaviour
             if (timeLimit == 0)
             {
                 GameOver();
+                if (watch != null)
+                {
+                    watch.transform.DORotate(new Vector3(0, 0, 180), 1f, RotateMode.FastBeyond360).SetEase(Ease.Linear);
+                }
             }
         }
     }
@@ -99,6 +111,8 @@ public class GameManager : MonoBehaviour
     public void EnemyKilled()
     {
         enemyCount--;
+        Debug.Log(enemyCount);
+
         if (enemyCount == 0)
         {
             GameWin();
@@ -107,20 +121,20 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (isGameActive)
-            {
-                Time.timeScale = 0;
-                gamePlayPanel.SetActive(false);
-                pausePanel.SetActive(true);
-                isGameActive = false;
-            }
-            else
-            {
-                ResumeGame();
-            }
-        }
+        // if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     if (isGameActive)
+        //     {
+        //         Time.timeScale = 0;
+        //         gamePlayPanel.SetActive(false);
+        //         pausePanel.SetActive(true);
+        //         isGameActive = false;
+        //     }
+        //     else
+        //     {
+        //         ResumeGame();
+        //     }
+        // }
     }
 
     public void ResumeGame()

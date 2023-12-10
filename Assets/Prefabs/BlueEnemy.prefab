@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4841094758446173692}
   m_Layer: 10
   m_Name: BlueEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,6 +151,7 @@ MonoBehaviour:
   enemyBulletPrefab: {fileID: 8884578507677216739, guid: cd7aeaae42e9a2a4bb1dfd7dfd71016c, type: 3}
   playerTransform: {fileID: 0}
   speed: 1
+  DeadBodyPrefab: {fileID: 898767747566042159, guid: 98d11514dab0c0f418f97db038deaac7, type: 3}
 --- !u!70 &4841094758446173692
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
