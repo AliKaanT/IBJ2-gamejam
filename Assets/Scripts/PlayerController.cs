@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
 
     public float runSpeed = 3.0f;
 
+    public Animator animator;
+
     private void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -33,6 +35,15 @@ public class PlayerController : MonoBehaviour
         vertical = Input.GetAxisRaw("Vertical");
 
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
+
+        if (horizontal != 0 || vertical != 0)
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
     }
 
     public void DashHandler()
@@ -41,6 +52,8 @@ public class PlayerController : MonoBehaviour
         {
             if (DashCooldown <= 0)
             {
+
+                animator.SetTrigger("onDash");
                 DashCooldown = 1f;
                 horizontal = Input.GetAxisRaw("Horizontal");
                 vertical = Input.GetAxisRaw("Vertical");

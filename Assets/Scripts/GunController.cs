@@ -6,8 +6,8 @@ public class GunController : MonoBehaviour
 {
     public GameObject bulletPrefab;
     private GameObject bulletInstance;
+    public Animator animator;
 
-    // Update is called once per frame
     void Update()
     {
         RotateGunWithMouse();
@@ -26,6 +26,8 @@ public class GunController : MonoBehaviour
 
     void Shoot()
     {
+        animator.SetTrigger("onShoot");
+
         if (bulletInstance != null) return;
 
         Vector3 position = gameObject.transform.position;
